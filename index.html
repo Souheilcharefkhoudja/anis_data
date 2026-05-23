@@ -413,7 +413,7 @@
         <span class="ar">حركة الموقع</span>
       </div>
       <div class="meta">
-        Suivi du site Vercel
+        Suivi du site Vercel · depuis le déploiement du beacon
         <span class="domain" id="vercel-domain">via beacon</span>
       </div>
     </div>
@@ -1014,11 +1014,22 @@
       </div>
     `;
 
-    // Fill KPIs
-    animateNumber(document.getElementById('shop-visitors'), s.summary.visitors);
-    animateNumber(document.getElementById('shop-sessions'), s.summary.sessions);
+    // Fill KPIs — handle -1 sentinel as "—" (means data not available from Admin API without ShopifyQL)
+    function setKpi(elId, val, opts) {
+      var el = document.getElementById(elId);
+      if (!el) return;
+      if (val === -1 || val === null || val === undefined) {
+        // Replace just the numeric text node, keep any unit span
+        if (el.firstChild && el.firstChild.nodeType === 3) el.firstChild.nodeValue = '\u2014';
+        else el.innerHTML = '\u2014' + (el.innerHTML.match(/<span[^>]*>.*?<\/span>/) || [''])[0];
+      } else {
+        animateNumber(el, val, opts || {});
+      }
+    }
+    setKpi('shop-visitors', s.summary.visitors);
+    setKpi('shop-sessions', s.summary.sessions);
     animateNumber(document.getElementById('shop-orders'), s.summary.orders);
-    animateNumber(document.getElementById('shop-conv'), s.summary.conversion_rate, { formatter: v => v.toFixed(2) });
+    setKpi('shop-conv', s.summary.conversion_rate, { formatter: v => v.toFixed(2) });
 
     // Chart
     const trend = s.daily_trend || [];
