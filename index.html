@@ -323,6 +323,52 @@
   .worker-rate-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green-deep),var(--green));transition:width 1.4s cubic-bezier(.2,.7,.3,1);width:0%}
   @media(max-width:680px){.worker-cards{grid-template-columns:1fr}}
 
+
+  /* ── Stock section ──────────────────── */
+  .stock-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:28px}
+  .stock-card{background:#fff;border:1.5px solid var(--rule);border-radius:var(--radius);padding:22px;transition:all .25s ease;position:relative;overflow:hidden}
+  .stock-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .stock-card.ok::before{background:var(--green)}
+  .stock-card.low::before{background:var(--gold)}
+  .stock-card.out::before{background:var(--red)}
+  .stock-card:hover{box-shadow:var(--shadow-lift);transform:translateY(-2px)}
+  .stock-card-name{font-weight:700;font-size:14px;color:var(--ink);margin-bottom:10px;line-height:1.3}
+  .stock-qty-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .stock-qty-num{font-family:var(--display);font-weight:500;font-size:36px;letter-spacing:-.02em;line-height:1}
+  .stock-qty-num.ok{color:var(--ink)}
+  .stock-qty-num.low{color:var(--gold-deep)}
+  .stock-qty-num.out{color:var(--red)}
+  .stock-qty-unit{font-size:12px;color:var(--ink-muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:6px}
+  .stock-bar-wrap{height:5px;background:var(--rule-soft);border-radius:999px;overflow:hidden;margin-bottom:12px}
+  .stock-bar-fill{height:100%;border-radius:999px;transition:width 1.2s cubic-bezier(.2,.7,.3,1)}
+  .stock-bar-fill.ok{background:linear-gradient(90deg,var(--green-deep),var(--green))}
+  .stock-bar-fill.low{background:linear-gradient(90deg,var(--gold-deep),var(--gold))}
+  .stock-bar-fill.out{background:var(--red)}
+  .stock-edit-row{display:flex;gap:6px;align-items:center}
+  .stock-edit-btn{width:30px;height:30px;border-radius:7px;border:1.5px solid var(--rule);background:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;color:var(--ink);flex-shrink:0}
+  .stock-edit-btn.minus:hover{border-color:var(--red);color:var(--red)}
+  .stock-edit-btn.plus:hover{border-color:var(--green);color:var(--green)}
+  .stock-edit-input{width:54px;padding:6px 8px;border:1.5px solid var(--rule);border-radius:7px;font-size:13px;font-weight:600;text-align:center;color:var(--ink);outline:none;font-family:"DM Mono",monospace}
+  .stock-edit-input:focus{border-color:var(--ink)}
+  .stock-save-btn{padding:7px 12px;border-radius:7px;border:none;background:var(--green-deep);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;flex:1;transition:all .2s}
+  .stock-save-btn:hover{background:var(--green)}
+  .stock-alert-strip{background:var(--red-tint);border:1px solid rgba(182,52,43,.2);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:24px;display:none;align-items:center;gap:12px;flex-wrap:wrap}
+  .stock-alert-strip.show{display:flex}
+  .stock-alert-badge{background:var(--red);color:#fff;border-radius:999px;padding:3px 10px;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;flex-shrink:0}
+  .stock-alert-text{font-size:13px;font-weight:600;color:var(--red)}
+  .stock-summary-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+  .stock-summary-card{background:#fff;border:1px solid var(--rule);border-radius:var(--radius-sm);padding:16px 18px}
+  .stock-summary-card .ssl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-muted);font-weight:700;margin-bottom:6px}
+  .stock-summary-card .ssv{font-family:var(--display);font-weight:500;font-size:26px;letter-spacing:-.02em}
+  .stock-summary-card .ssv.green{color:var(--green-deep)}
+  .stock-summary-card .ssv.gold{color:var(--gold-deep)}
+  .stock-summary-card .ssv.red{color:var(--red)}
+  .stock-tabs{display:flex;gap:8px;margin-bottom:20px}
+  .stock-tab{padding:8px 18px;border-radius:999px;border:1.5px solid var(--rule);background:transparent;color:var(--ink-soft);font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .2s}
+  .stock-tab.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  @media(max-width:980px){.stock-grid{grid-template-columns:repeat(2,1fr)}.stock-summary-strip{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:580px){.stock-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -683,6 +729,53 @@
     <div class="worker-cards" id="worker-cards">
       <div class="not-configured" style="grid-column:1/-1">
         <h4>Chargement des statistiques agents…</h4>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- STOCK SECTION -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <section class="section" id="stock-section">
+    <div class="section-banner">
+      <div class="left">
+        <span class="num">No 06</span>
+        <h2>Stock <span class="ital">inventaire.</span></h2>
+        <span class="ar">إدارة المخزون</span>
+      </div>
+      <div class="meta">
+        Produits · Matières premières
+        <span class="domain">Google Sheet</span>
+      </div>
+    </div>
+
+    <div class="stock-alert-strip" id="stock-alert-strip">
+      <span class="stock-alert-badge">⚠ Stock bas</span>
+      <span class="stock-alert-text" id="stock-alert-text"></span>
+    </div>
+
+    <div class="stock-summary-strip">
+      <div class="stock-summary-card"><div class="ssl">Total produits</div><div class="ssv" id="stk-total-p">—</div></div>
+      <div class="stock-summary-card"><div class="ssl">Stock OK</div><div class="ssv green" id="stk-ok-p">—</div></div>
+      <div class="stock-summary-card"><div class="ssl">Stock bas</div><div class="ssv gold" id="stk-low-p">—</div></div>
+      <div class="stock-summary-card"><div class="ssl">Épuisé</div><div class="ssv red" id="stk-out-p">—</div></div>
+    </div>
+
+    <div class="stock-tabs">
+      <button class="stock-tab active" onclick="switchStockTab('products')" id="stk-tab-products">📦 Produits</button>
+      <button class="stock-tab" onclick="switchStockTab('materials')" id="stk-tab-materials">🧪 Matières premières</button>
+    </div>
+
+    <div id="stk-content-products">
+      <div class="stock-grid" id="stock-products-grid">
+        <div class="not-configured" style="grid-column:1/-1"><h4>Chargement du stock…</h4></div>
+      </div>
+    </div>
+
+    <div id="stk-content-materials" style="display:none">
+      <div class="stock-grid" id="stock-materials-grid">
+        <div class="not-configured" style="grid-column:1/-1"><h4>Chargement des matières…</h4></div>
       </div>
     </div>
   </section>
@@ -1567,6 +1660,163 @@
   }
 
 
+
+  // ════════════════════════════════════════════════════════════
+  //  STOCK SECTION
+  // ════════════════════════════════════════════════════════════
+  let stockProductsData = [], stockMaterialsData = [];
+  const STK_THRESHOLD = 20;
+
+  async function loadStockData() {
+    try {
+      const [pRes, mRes] = await Promise.all([
+        fetch(CONFIG.APPS_SCRIPT_URL + '?action=get_stock&token=' + CONFIG.TOKEN, { redirect: 'follow' }).then(r => r.json()),
+        fetch(CONFIG.APPS_SCRIPT_URL + '?action=get_materials&token=' + CONFIG.TOKEN, { redirect: 'follow' }).then(r => r.json())
+      ]);
+      if (pRes.ok) { stockProductsData = pRes.products || []; }
+      if (mRes.ok) { stockMaterialsData = mRes.materials || []; }
+      renderStockProducts();
+      renderStockMaterials();
+      renderStockAlerts();
+    } catch(err) {
+      document.getElementById('stock-products-grid').innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Erreur chargement stock</h4><p>' + err.message + '</p></div>';
+    }
+  }
+
+  function switchStockTab(tab) {
+    document.getElementById('stk-content-products').style.display = tab === 'products' ? 'block' : 'none';
+    document.getElementById('stk-content-materials').style.display = tab === 'materials' ? 'block' : 'none';
+    document.getElementById('stk-tab-products').classList.toggle('active', tab === 'products');
+    document.getElementById('stk-tab-materials').classList.toggle('active', tab === 'materials');
+  }
+
+  function renderStockAlerts() {
+    const lowP = stockProductsData.filter(p => p.qty > 0 && p.qty < STK_THRESHOLD);
+    const outP = stockProductsData.filter(p => p.qty <= 0);
+    const lowM = stockMaterialsData.filter(m => m.qty > 0 && m.qty < (m.threshold || STK_THRESHOLD));
+    const outM = stockMaterialsData.filter(m => m.qty <= 0);
+    const alerts = [
+      ...outP.map(p => p.name + ' (épuisé)'),
+      ...lowP.map(p => p.name + ' (' + p.qty + ' restants)'),
+      ...outM.map(m => m.name + ' (épuisé)'),
+      ...lowM.map(m => m.name + ' (' + m.qty + ' ' + m.unit + ')')
+    ];
+    const strip = document.getElementById('stock-alert-strip');
+    if (alerts.length) { strip.classList.add('show'); document.getElementById('stock-alert-text').textContent = alerts.join(' · '); }
+    else strip.classList.remove('show');
+
+    const ok = stockProductsData.filter(p => p.qty >= STK_THRESHOLD).length;
+    const low = lowP.length, out = outP.length;
+    const safe = el => { const e = document.getElementById(el); if(e) return e; return {textContent:''}; };
+    safe('stk-total-p').textContent = stockProductsData.length;
+    safe('stk-ok-p').textContent = ok;
+    safe('stk-low-p').textContent = low;
+    safe('stk-out-p').textContent = out;
+  }
+
+  function renderStockProducts() {
+    const maxQ = Math.max(...stockProductsData.map(p => p.qty), STK_THRESHOLD * 3, 1);
+    const grid = document.getElementById('stock-products-grid');
+    if (!stockProductsData.length) { grid.innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Aucun produit en stock</h4><p>Connectez-vous à l'interface Stock Produits pour saisir les quantités initiales.</p></div>'; return; }
+    grid.innerHTML = stockProductsData.map(p => {
+      const level = p.qty <= 0 ? 'out' : p.qty < STK_THRESHOLD ? 'low' : 'ok';
+      const pct = Math.min((p.qty / maxQ) * 100, 100);
+      return `<div class="stock-card ${level}">
+        <div class="stock-card-name">${p.name}</div>
+        <div class="stock-qty-row">
+          <div class="stock-qty-num ${level}">${p.qty}</div>
+          <div class="stock-qty-unit">unités</div>
+        </div>
+        <div class="stock-bar-wrap"><div class="stock-bar-fill ${level}" style="width:${pct}%"></div></div>
+        <div class="stock-edit-row">
+          <button class="stock-edit-btn minus" onclick="stkAdjustProduct('${p.id}',-1)">−</button>
+          <input type="number" class="stock-edit-input" id="stkp-${p.id}" value="1" min="1">
+          <button class="stock-edit-btn plus" onclick="stkAdjustProduct('${p.id}',1)">+</button>
+          <button class="stock-save-btn" onclick="stkRestockProduct('${p.id}')">+ Réappro</button>
+        </div>
+        <div style="font-size:11px;color:var(--ink-muted);margin-top:8px">Mis à jour: ${p.updated_at || '—'}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderStockMaterials() {
+    const maxQ = Math.max(...stockMaterialsData.map(m => m.qty), STK_THRESHOLD * 3, 1);
+    const grid = document.getElementById('stock-materials-grid');
+    if (!stockMaterialsData.length) { grid.innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Aucune matière enregistrée</h4><p>Connectez-vous à l'interface Stock Matières pour configurer les matières premières.</p></div>'; return; }
+    grid.innerHTML = stockMaterialsData.map(m => {
+      const thresh = m.threshold || STK_THRESHOLD;
+      const level = m.qty <= 0 ? 'out' : m.qty < thresh ? 'low' : 'ok';
+      const pct = Math.min((m.qty / maxQ) * 100, 100);
+      return `<div class="stock-card ${level}">
+        <div class="stock-card-name">${m.name}</div>
+        <div class="stock-qty-row">
+          <div class="stock-qty-num ${level}">${m.qty}</div>
+          <div class="stock-qty-unit">${m.unit}</div>
+        </div>
+        <div class="stock-bar-wrap"><div class="stock-bar-fill ${level}" style="width:${pct}%"></div></div>
+        <div class="stock-edit-row">
+          <button class="stock-edit-btn minus" onclick="stkAdjustMaterial('${m.id}',-1)">−</button>
+          <input type="number" class="stock-edit-input" id="stkm-${m.id}" value="1" min="0.1" step="0.1">
+          <button class="stock-edit-btn plus" onclick="stkAdjustMaterial('${m.id}',1)">+</button>
+          <button class="stock-save-btn" onclick="stkRestockMaterial('${m.id}')">+ Entrée</button>
+        </div>
+        <div style="font-size:11px;color:var(--ink-muted);margin-top:8px">Mis à jour: ${m.updated_at || '—'}</div>
+      </div>`;
+    }).join('');
+  }
+
+  async function stkAdjustProduct(id, dir) {
+    const input = document.getElementById('stkp-' + id);
+    const qty = parseInt(input.value) || 1;
+    const p = stockProductsData.find(p => p.id === id); if (!p) return;
+    const newQty = Math.max(0, p.qty + (dir * qty));
+    await stkUpdateProduct(id, newQty, dir > 0 ? 'Réappro dashboard' : 'Correction dashboard');
+  }
+
+  async function stkRestockProduct(id) {
+    const input = document.getElementById('stkp-' + id);
+    const qty = parseInt(input.value) || 1;
+    const p = stockProductsData.find(p => p.id === id); if (!p) return;
+    await stkUpdateProduct(id, p.qty + qty, 'Réapprovisionnement');
+  }
+
+  async function stkUpdateProduct(id, newQty, reason) {
+    try {
+      const res = await fetch(CONFIG.APPS_SCRIPT_URL, {
+        method: 'POST', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'update_stock', product_id: id, qty: newQty, reason: reason, worker: 'boss', wtoken: 'boss' })
+      }).then(r => r.json());
+      if (res.ok) { const p = stockProductsData.find(p => p.id === id); if(p) p.qty = newQty; renderStockProducts(); renderStockAlerts(); }
+    } catch(e) { console.error('Stock update error', e); }
+  }
+
+  async function stkAdjustMaterial(id, dir) {
+    const input = document.getElementById('stkm-' + id);
+    const qty = parseFloat(input.value) || 1;
+    const m = stockMaterialsData.find(m => m.id === id); if (!m) return;
+    const newQty = Math.max(0, parseFloat((m.qty + (dir * qty)).toFixed(2)));
+    await stkUpdateMaterial(id, newQty, dir > 0 ? 'Ajout dashboard' : 'Retrait dashboard');
+  }
+
+  async function stkRestockMaterial(id) {
+    const input = document.getElementById('stkm-' + id);
+    const qty = parseFloat(input.value) || 1;
+    const m = stockMaterialsData.find(m => m.id === id); if (!m) return;
+    await stkUpdateMaterial(id, parseFloat((m.qty + qty).toFixed(2)), 'Entrée stock');
+  }
+
+  async function stkUpdateMaterial(id, newQty, reason) {
+    try {
+      const res = await fetch(CONFIG.APPS_SCRIPT_URL, {
+        method: 'POST', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'update_material', material_id: id, qty: newQty, reason: reason, worker: 'boss', wtoken: 'boss' })
+      }).then(r => r.json());
+      if (res.ok) { const m = stockMaterialsData.find(m => m.id === id); if(m) m.qty = newQty; renderStockMaterials(); renderStockAlerts(); }
+    } catch(e) { console.error('Material update error', e); }
+  }
+
   // ════════════════════════════════════════════════════════════
   //  BOSS LOGIN
   // ════════════════════════════════════════════════════════════
@@ -1675,6 +1925,7 @@
     btn.classList.add('spinning');
     const data = await fetchDashboardData();
     render(data);
+    loadStockData();
     btn.classList.remove('spinning');
   }
 
