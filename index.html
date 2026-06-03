@@ -1717,7 +1717,7 @@
   function renderStockProducts() {
     const maxQ = Math.max(...stockProductsData.map(p => p.qty), STK_THRESHOLD * 3, 1);
     const grid = document.getElementById('stock-products-grid');
-    if (!stockProductsData.length) { grid.innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Aucun produit en stock</h4><p>Connectez-vous à l'interface Stock Produits pour saisir les quantités initiales.</p></div>'; return; }
+    if (!stockProductsData.length) { grid.innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Aucun produit en stock</h4><p>Connectez-vous à l&#39;interface Stock Produits pour saisir les quantités initiales.</p></div>'; return; }
     grid.innerHTML = stockProductsData.map(p => {
       const level = p.qty <= 0 ? 'out' : p.qty < STK_THRESHOLD ? 'low' : 'ok';
       const pct = Math.min((p.qty / maxQ) * 100, 100);
@@ -1742,7 +1742,7 @@
   function renderStockMaterials() {
     const maxQ = Math.max(...stockMaterialsData.map(m => m.qty), STK_THRESHOLD * 3, 1);
     const grid = document.getElementById('stock-materials-grid');
-    if (!stockMaterialsData.length) { grid.innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Aucune matière enregistrée</h4><p>Connectez-vous à l'interface Stock Matières pour configurer les matières premières.</p></div>'; return; }
+    if (!stockMaterialsData.length) { grid.innerHTML = '<div class="not-configured" style="grid-column:1/-1"><h4>Aucune matière enregistrée</h4><p>Connectez-vous à l&#39;interface Stock Matières pour configurer les matières premières.</p></div>'; return; }
     grid.innerHTML = stockMaterialsData.map(m => {
       const thresh = m.threshold || STK_THRESHOLD;
       const level = m.qty <= 0 ? 'out' : m.qty < thresh ? 'low' : 'ok';
