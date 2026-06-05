@@ -369,10 +369,208 @@
   @media(max-width:980px){.stock-grid{grid-template-columns:repeat(2,1fr)}.stock-summary-strip{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:580px){.stock-grid{grid-template-columns:1fr}}
 
+
+/* ── SIDEBAR NAV ─────────────────────────── */
+.layout-wrap{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidenav{
+  position:fixed;top:0;left:0;height:100vh;width:240px;
+  background:#fff;border-right:1px solid var(--rule);
+  z-index:100;display:flex;flex-direction:column;
+  transition:transform .3s cubic-bezier(.2,.7,.3,1);
+  box-shadow:4px 0 40px -8px rgba(26,26,26,.08);
+}
+.sidenav-brand{
+  padding:22px 24px 18px;border-bottom:1px solid var(--rule);
+  font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1;
+  flex-shrink:0;
+}
+.sidenav-brand em{font-style:italic;color:var(--red);font-weight:500}
+.sidenav-brand small{display:block;font-family:var(--body);font-weight:600;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--ink-muted);margin-top:6px}
+
+.sidenav-status{padding:10px 16px;border-bottom:1px solid var(--rule);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sidenav-status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;box-shadow:0 0 0 0 rgba(126,155,92,.7);animation:pulse 2s infinite}
+.sidenav-status-dot.demo{background:var(--gold)}
+.sidenav-status-dot.error{background:var(--red)}
+.sidenav-status-text{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);flex:1}
+.sidenav-clock{font-size:11px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:.06em}
+
+.sidenav-scroll{flex:1;overflow-y:auto;padding:12px 0 16px;scrollbar-width:none}
+.sidenav-scroll::-webkit-scrollbar{display:none}
+
+.sidenav-section-label{
+  padding:10px 20px 4px;
+  font-size:9px;letter-spacing:.28em;text-transform:uppercase;font-weight:700;
+  color:var(--ink-muted);
+}
+.sidenav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 20px;margin:1px 8px;border-radius:10px;
+  text-decoration:none;color:var(--ink-soft);
+  font-size:13px;font-weight:600;letter-spacing:.01em;
+  transition:all .18s ease;cursor:pointer;border:none;background:transparent;width:calc(100% - 16px);text-align:left;
+  position:relative;
+}
+.sidenav-item:hover{background:var(--paper-warm);color:var(--ink)}
+.sidenav-item.active{background:var(--ink);color:#fff}
+.sidenav-item.active .nav-icon{opacity:1}
+.nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;opacity:.6;transition:opacity .18s}
+.sidenav-item:hover .nav-icon,.sidenav-item.active .nav-icon{opacity:1}
+.nav-label{flex:1}
+.nav-badge{
+  font-size:9px;padding:2px 7px;border-radius:999px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;flex-shrink:0;
+}
+.nav-badge.live{background:var(--green-tint);color:var(--green-deep)}
+.nav-badge.warn{background:var(--gold-tint);color:var(--gold-deep)}
+.nav-badge.active-badge{background:rgba(255,255,255,.2);color:#fff}
+
+.sidenav-divider{height:1px;background:var(--rule);margin:8px 16px}
+
+.sidenav-bottom{
+  padding:12px 16px;border-top:1px solid var(--rule);flex-shrink:0;display:flex;gap:8px;align-items:center;
+}
+.nav-refresh-btn{
+  flex:1;padding:9px 12px;border:1.5px solid var(--rule);background:#fff;
+  border-radius:8px;font-family:var(--body);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);
+  cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:6px;justify-content:center;
+}
+.nav-refresh-btn:hover{color:var(--ink);border-color:var(--ink);background:var(--paper-warm)}
+.nav-refresh-icon{display:inline-block;transition:transform .3s}
+.nav-refresh-btn.spinning .nav-refresh-icon{animation:spin 1s linear infinite}
+.nav-logout-btn{
+  padding:9px 10px;border:1.5px solid var(--rule);background:#fff;border-radius:8px;
+  font-size:13px;cursor:pointer;transition:all .2s;color:var(--ink-soft);
+}
+.nav-logout-btn:hover{border-color:var(--red);color:var(--red);background:var(--red-tint)}
+
+/* Mobile toggle */
+.nav-toggle{
+  display:none;position:fixed;top:14px;left:14px;z-index:200;
+  width:42px;height:42px;border-radius:10px;border:1px solid var(--rule);
+  background:#fff;box-shadow:0 4px 16px rgba(26,26,26,.12);
+  align-items:center;justify-content:center;cursor:pointer;
+  font-size:18px;color:var(--ink);transition:all .2s;
+}
+.nav-toggle:hover{background:var(--paper-warm)}
+.nav-overlay{
+  display:none;position:fixed;inset:0;background:rgba(26,26,26,.4);
+  z-index:99;backdrop-filter:blur(2px);opacity:0;transition:opacity .3s;
+}
+
+/* Main content shifted */
+.main-content{flex:1;margin-left:240px;min-width:0}
+
+/* Topbar inside main-content (no longer full-width fixed) */
+.topbar{display:none} /* hide original topbar – integrated into sidenav */
+
+/* Header brand – compact since logo is in sidebar */
+header.brand{display:none}
+
+/* Source notice stays but moves */
+.source-notice{margin-left:0}
+
+/* Scrollspy active highlight */
+.sidenav-item[data-section].spy-active{
+  background:var(--red-tint);color:var(--red-deep);
+}
+.sidenav-item[data-section].spy-active .nav-icon{opacity:1}
+
+/* Smooth scroll on sections */
+section.section{scroll-margin-top:24px}
+
+/* Responsive */
+@media(max-width:900px){
+  .sidenav{transform:translateX(-100%)}
+  .sidenav.open{transform:translateX(0)}
+  .nav-toggle{display:flex}
+  .nav-overlay.open{display:block;opacity:1}
+  .main-content{margin-left:0}
+}
+
 </style>
 </head>
 <body>
 
+<!-- Mobile nav toggle -->
+<button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+<div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+
+<!-- SIDEBAR NAVIGATION -->
+<nav class="sidenav" id="sidenav">
+  <div class="sidenav-brand">
+    Nu<em>t</em>sa
+    <small>Direction Générale</small>
+  </div>
+
+  <div class="sidenav-status">
+    <span class="sidenav-status-dot" id="nav-status-dot"></span>
+    <span class="sidenav-status-text" id="nav-status-text">Chargement…</span>
+    <span class="sidenav-clock" id="nav-clock">--:--</span>
+  </div>
+
+  <div class="sidenav-scroll">
+
+    <div class="sidenav-section-label">Vue d'ensemble</div>
+    <a class="sidenav-item" data-section="hero" href="#hero-section" onclick="closeNav()">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">Tableau de bord</span>
+    </a>
+
+    <div class="sidenav-divider"></div>
+    <div class="sidenav-section-label">Sources de données</div>
+
+    <a class="sidenav-item" data-section="shopify-section" href="#shopify-section" onclick="closeNav()">
+      <span class="nav-icon">🛍</span>
+      <span class="nav-label">Shopify</span>
+      <span class="nav-badge live" id="nav-badge-shopify">…</span>
+    </a>
+
+    <a class="sidenav-item" data-section="vercel-section" href="#vercel-section" onclick="closeNav()">
+      <span class="nav-icon">▲</span>
+      <span class="nav-label">Vercel Trafic</span>
+      <span class="nav-badge live" id="nav-badge-vercel">…</span>
+    </a>
+
+    <a class="sidenav-item" data-section="anderson-section" href="#anderson-section" onclick="closeNav()">
+      <span class="nav-icon">🚚</span>
+      <span class="nav-label">Anderson Logistique</span>
+      <span class="nav-badge live">Live</span>
+    </a>
+
+    <a class="sidenav-item" data-section="sheet-section" href="#sheet-section" onclick="closeNav()">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">Centre d'appels</span>
+      <span class="nav-badge live">Live</span>
+    </a>
+
+    <div class="sidenav-divider"></div>
+    <div class="sidenav-section-label">Opérations</div>
+
+    <a class="sidenav-item" data-section="workers-section" href="#workers-section" onclick="closeNav()">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label">Agents</span>
+    </a>
+
+    <a class="sidenav-item" data-section="stock-section" href="#stock-section" onclick="closeNav()">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Stock & Inventaire</span>
+      <span class="nav-badge warn" id="nav-badge-stock" style="display:none">!</span>
+    </a>
+
+  </div>
+
+  <div class="sidenav-bottom">
+    <button class="nav-refresh-btn" id="nav-refresh-btn" onclick="navRefresh()">
+      <span class="nav-refresh-icon" id="nav-refresh-icon">↻</span> Actualiser
+    </button>
+    <button class="nav-logout-btn" id="nav-logout-btn-side" title="Déconnexion" onclick="bossLogout()" style="display:none">⏻</button>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT WRAPPER -->
+<div class="main-content">
 
 <div id="boss-login">
   <div class="boss-login-brand">
@@ -421,7 +619,7 @@
 </div>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero-section">
   <div class="kicker">Vue d'ensemble · toutes sources confondues</div>
   <div class="hero-grid">
     <h1>Tout en un <span class="ital">coup d'œil.</span>
@@ -1930,7 +2128,117 @@
   }
 
   document.getElementById('refresh-btn').addEventListener('click', () => { if(localStorage.getItem('nutsa_boss_auth')==='1') load(); });
+
+  // ════════════════════════════════════════════════════════════
+  //  SIDEBAR NAV
+  // ════════════════════════════════════════════════════════════
+  function toggleNav(){
+    const nav = document.getElementById('sidenav');
+    const overlay = document.getElementById('nav-overlay');
+    nav.classList.toggle('open');
+    overlay.classList.toggle('open');
+  }
+  function closeNav(){
+    const nav = document.getElementById('sidenav');
+    const overlay = document.getElementById('nav-overlay');
+    nav.classList.remove('open');
+    overlay.classList.remove('open');
+  }
+
+  // Sync nav clock with main clock
+  function tickNavClock(){
+    const d = new Date();
+    const p = n => String(n).padStart(2,'0');
+    const el = document.getElementById('nav-clock');
+    if(el) el.textContent = p(d.getHours())+':'+p(d.getMinutes());
+  }
+  tickNavClock(); setInterval(tickNavClock, 10000);
+
+  // Sync nav status dot
+  const _origSetStatus = setStatus;
+  function setStatus(kind, message, updatedAt){
+    _origSetStatus(kind, message, updatedAt);
+    const dot = document.getElementById('nav-status-dot');
+    const txt = document.getElementById('nav-status-text');
+    if(dot){ dot.className = 'sidenav-status-dot' + (kind==='demo'?' demo':kind==='error'?' error':''); }
+    if(txt){ txt.textContent = kind==='live'?'En direct':kind==='demo'?'Mode démo':'Erreur'; }
+  }
+
+  // Sync nav badges with source strip badges
+  function syncNavBadges(){
+    const shopBadge = document.getElementById('badge-shopify');
+    const navShop = document.getElementById('nav-badge-shopify');
+    if(shopBadge && navShop){
+      navShop.textContent = shopBadge.textContent;
+      navShop.className = 'nav-badge ' + (shopBadge.className.includes('live') ? 'live' : 'warn');
+    }
+    const verBadge = document.getElementById('badge-vercel');
+    const navVer = document.getElementById('nav-badge-vercel');
+    if(verBadge && navVer){
+      navVer.textContent = verBadge.textContent;
+      navVer.className = 'nav-badge ' + (verBadge.className.includes('live') ? 'live' : 'warn');
+    }
+  }
+  // Show logout in sidebar after login
+  const _origLoad = load;
+  async function load(){
+    const btn = document.getElementById('nav-refresh-btn');
+    if(btn) btn.classList.add('spinning');
+    await _origLoad();
+    if(btn) btn.classList.remove('spinning');
+    // show logout
+    const logoutSide = document.getElementById('nav-logout-btn-side');
+    if(logoutSide) logoutSide.style.display = 'block';
+    setTimeout(syncNavBadges, 800);
+    setTimeout(syncStockAlert, 1200);
+  }
+
+  function navRefresh(){
+    if(localStorage.getItem('nutsa_boss_auth')==='1') load();
+  }
+
+  // Stock alert badge in nav
+  function syncStockAlert(){
+    const alertStrip = document.getElementById('stock-alert-strip');
+    const navBadge = document.getElementById('nav-badge-stock');
+    if(alertStrip && navBadge){
+      if(alertStrip.classList.contains('show')){
+        navBadge.style.display='inline-block';
+      } else {
+        navBadge.style.display='none';
+      }
+    }
+  }
+
+  // Scrollspy — highlight nav item based on visible section
+  function initScrollspy(){
+    const sections = [
+      'hero-section','shopify-section','vercel-section',
+      'anderson-section','sheet-section','workers-section','stock-section'
+    ];
+    const navItems = document.querySelectorAll('.sidenav-item[data-section]');
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          navItems.forEach(item => {
+            const active = item.dataset.section === entry.target.id;
+            item.classList.toggle('spy-active', active);
+          });
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '-10% 0px -60% 0px' });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) obs.observe(el);
+    });
+  }
+  document.addEventListener('DOMContentLoaded', initScrollspy);
+
 </script>
+
+</div><!-- /main-content -->
 
 </body>
 </html>
