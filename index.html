@@ -2118,14 +2118,34 @@ section.section{scroll-margin-top:24px}
   // ════════════════════════════════════════════════════════════
   //  BOOT
   // ════════════════════════════════════════════════════════════
-  async function load(){
-    const btn = document.getElementById('refresh-btn');
-    btn.classList.add('spinning');
-    const data = await fetchDashboardData();
-    render(data);
-    loadStockData();
-    btn.classList.remove('spinning');
+async function load() {
+  const navBtn = document.getElementById('nav-refresh-btn');
+  const oldBtn = document.getElementById('refresh-btn');
+  if (navBtn) navBtn.classList.add('spinning');
+  if (oldBtn) oldBtn.classList.add('spinning');
+
+  const data = await fetchDashboardData();
+  render(data);
+
+  // Stock now comes from the main response — no separate fetch needed
+  if (data.stock && data.stock.products) {
+    stockProductsData = data.stock.products || [];
+    renderStockProducts();
   }
+  if (data.materials && data.materials.materials) {
+    stockMaterialsData = data.materials.materials || [];
+    renderStockMaterials();
+  }
+  renderStockAlerts();
+
+  if (navBtn) navBtn.classList.remove('spinning');
+  if (oldBtn) oldBtn.classList.remove('spinning');
+
+  const logoutSide = document.getElementById('nav-logout-btn-side');
+  if (logoutSide) logoutSide.style.display = 'block';
+  setTimeout(syncNavBadges, 800);
+  setTimeout(syncStockAlert, 1200);
+}
 
   document.getElementById('refresh-btn').addEventListener('click', () => { if(localStorage.getItem('nutsa_boss_auth')==='1') load(); });
 
