@@ -2200,7 +2200,7 @@ async function load() {
     }
   }
   // Show logout in sidebar after login
-  const _origLoad = load;
+  
   async function load(){
     const btn = document.getElementById('nav-refresh-btn');
     if(btn) btn.classList.add('spinning');
